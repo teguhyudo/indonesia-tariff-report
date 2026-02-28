@@ -1,0 +1,529 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{caption}
+\usepackage{authblk}
+\usepackage{setspace}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+\begin{document}
+\title{\textbf{Feasibility Assessment: Extending Yale Tariff-ETRs to GTAP General Equilibrium Simulation for Indonesia}}
+
+\author[1]{Teguh Yudo Wicaksono \thanks{Faculty of Economics and Business, UIII}}
+\author[1]{Rima P Artha}
+\author[2]{Philips J. Vermonte\thanks{Faculty of Social Science, UIII}}
+\affil[1]{Senior Fellow }
+\affil[2]{Convenor}
+\affil[1,2]{Indonesian Institute for Foreign Affairs (IIFA), Universitas Islam Internasional Indonesia (UIII)}
+
+\date{February 22, 2026}
+\onehalfspacing
+\maketitle
+
+%----------------------------------------------------------------------
+\section*{Abstract}
+%----------------------------------------------------------------------
+
+Our recent policy brief calculated effective tariff rates (ETRs) on Indonesian exports to the United States across five tariff scenarios using the Yale Budget Lab Tariff-ETR model. That analysis is partial equilibrium---it computes tariff rates but cannot estimate GDP impact, trade diversion, welfare effects, or sectoral restructuring. This report assesses the feasibility of extending the Yale Tariff-ETR outputs to a full general equilibrium simulation using the Global Trade Analysis Project (GTAP) framework. We find that a well-defined technical pathway exists: the Yale model already produces Indonesia-specific ETRs by GTAP sector, which map directly to the tariff shock parameters that GTAP expects. We document the data bridge, software requirements, proposed workflow, and resource needs, and provide a proof-of-concept shock converter script.
+
+\newpage
+\tableofcontents
+\newpage
+
+%----------------------------------------------------------------------
+\section{Introduction and Motivation}
+\label{sec:introduction}
+%----------------------------------------------------------------------
+
+\subsection{What the Existing ETR Analysis Provides}
+
+Our companion policy brief \cite{wicaksono2026} applies the Yale Budget Lab's open-source Tariff-ETR model \cite{yalebudgetlab_model} to Indonesia's trade data, producing effective tariff rates across five scenarios: the pre-crisis baseline, Liberation Day (32\% IEEPA reciprocal), the Post-Deal framework (19\% with exemptions), Post-SCOTUS Section 122 at 10\%, and the current Section 122 at 15\%. The analysis covers 4,921 HTS-10 tariff lines representing \$27.88 billion in US imports from Indonesia, aggregated to 33 GTAP sectors with positive trade.
+
+The key findings include: Indonesia's current ETR stands at 17.7\% (incremental, above MFN) under the 15\% Section 122 regime; commodity exporters (palm oil, rubber, coffee, cocoa) face the largest increases relative to the negotiated deal; and the aggregate ETR exceeds the deal rate by approximately 0.6 percentage points when MFN duties are included.
+
+\subsection{What It Cannot Answer}
+
+The ETR analysis is inherently partial equilibrium. It computes the tariff burden on each product line given fixed trade volumes. It cannot address:
+
+\begin{itemize}
+    \item \textbf{GDP impact}: How much does Indonesian aggregate output contract under each scenario?
+    \item \textbf{Trade diversion}: Do competitor countries (Vietnam, Bangladesh, India) gain US market share at Indonesia's expense?
+    \item \textbf{Welfare effects}: What is the equivalent variation decomposition---allocative efficiency vs.\ terms-of-trade effects?
+    \item \textbf{Factor market effects}: How do wages, returns to capital, and employment shift across sectors? Textiles and apparel alone employ approximately 4 million workers in Indonesia.
+    \item \textbf{Third-country effects}: How does the tariff shock propagate through Indonesia's trade with the EU, RCEP partners, Japan, and China?
+    \item \textbf{Terms of trade}: Indonesia supplies 85\% of US refined palm oil---does the tariff burden fall on Indonesian producers or US consumers?
+\end{itemize}
+
+\subsection{Research Question}
+
+\textit{Is it feasible to extend the Yale Budget Lab Tariff-ETR outputs into a GTAP general equilibrium simulation for Indonesia, and what is the technical pathway?}
+
+Our conclusion is \textbf{yes}. The data bridge already exists. The Yale model produces Indonesia-specific ETRs by GTAP sector code---precisely the \texttt{tms} (tariff on imports of commodity) shock values that GTAP expects. This report documents the pathway, requirements, and proof of concept.
+
+%----------------------------------------------------------------------
+\section{The Yale Budget Lab Tariff-ETRs Model}
+\label{sec:yale_model}
+%----------------------------------------------------------------------
+
+\subsection{Architecture}
+
+The Yale Budget Lab Tariff-ETR model \cite{yalebudgetlab_model} is an R-based framework that:
+
+\begin{enumerate}
+    \item Downloads HTS-10 level US import data from the Census Bureau API (10-digit Harmonized System codes, $\sim$18,000 lines globally)
+    \item Loads tariff configurations from YAML files specifying rates for Section 232, IEEPA reciprocal, IEEPA fentanyl, and Section 122
+    \item Applies stacking rules: Section 232 and reciprocal tariffs are mutually exclusive (the higher applies); fentanyl tariffs stack for China but are mutually exclusive for others; Section 122 stacks on everything
+    \item Maps HTS-10 codes to GTAP sectors via a crosswalk file (\texttt{hs10\_gtap\_crosswalk.csv})
+    \item Aggregates results by GTAP sector and partner region, producing ETRs and shock commands
+\end{enumerate}
+
+The model supports multiple scenario configurations. Each scenario is defined by a set of YAML files in the \texttt{config/\{scenario\}/} directory, enabling comparison of tariff regimes.
+
+\subsection{Indonesia-Specific Implementation}
+
+For the Indonesia analysis, we developed a custom script (\texttt{calculate\_indonesia\_etr.R}) that isolates Indonesia's data by filtering on Census country code 5600. This resolves the ``partner aggregation problem'': in the standard Yale model output, Indonesia is aggregated into the ``ROW'' (Rest of World) partner group along with 183 other countries. The custom script downloads Indonesia-specific HTS-10 data directly from the Census Bureau API and runs the full tariff calculation pipeline on Indonesia alone.
+
+The Indonesia data comprises:
+\begin{itemize}
+    \item \textbf{4,921 tariff lines} at the HTS-10 level
+    \item \textbf{\$27.88 billion} in total US consumption imports (2024)
+    \item \textbf{33 GTAP sectors} with positive trade
+    \item \textbf{4 scenarios}: Post-Deal (12-4), Post-SCOTUS S122 at 10\% (2-20), pre-SCOTUS baseline (11-17), and S122 at 15\% (2-21)
+\end{itemize}
+
+\subsection{Output: Indonesia ETRs by GTAP Sector}
+
+Table~\ref{tab:top10sectors} presents the top 10 Indonesian export sectors by import value, with ETRs from the Post-Deal (12-4) and current S122 at 15\% (2-21) scenarios. These values are drawn directly from the model's CSV output files.
+
+\begin{table}[htbp]
+\centering
+\caption{Top 10 Indonesia Sectors by US Import Value with ETRs Across Scenarios}
+\small
+\begin{tabular}{llrccc}
+\toprule
+\textbf{GTAP} & \textbf{Sector} & \textbf{Imports (\$B)} & \textbf{ETR 12-4} & \textbf{ETR S122-10\%} & \textbf{ETR S122-15\%} \\
+\midrule
+wap & Wearing apparel       & 4.40 & 19.0\% & 10.0\% & 15.0\% \\
+lea & Leather products      & 3.29 & 19.0\% & 10.0\% & 15.0\% \\
+eeq & Electronic equipment  & 2.95 & 22.2\% & 16.7\% & 21.7\% \\
+omf & Other manufactures    & 2.77 & 19.9\% & 12.2\% & 17.2\% \\
+ofd & Other food products   & 2.76 & 15.1\% & 10.0\% & 15.0\% \\
+ele & Electrical equipment  & 2.52 & 12.7\% & 13.4\% & 18.4\% \\
+rpp & Rubber \& plastics    & 1.99 & 14.4\% & 19.9\% & 24.9\% \\
+vol & Vegetable oils \& fats & 1.99 & 18.4\% & 10.0\% & 15.0\% \\
+chm & Chemical products     & 1.24 & 16.8\% & 10.0\% & 15.0\% \\
+lum & Wood products         & 0.74 & 18.5\% & 10.5\% & 15.5\% \\
+\bottomrule
+\end{tabular}
+\par\smallskip
+\begin{minipage}{\linewidth}
+\footnotesize
+\textit{Note:} ETRs are incremental (above MFN baseline), expressed as decimal percentages. Imports are 2024 US consumption import values. ``12-4'' corresponds to the Post-Deal/IEEPA reciprocal scenario; ``S122-10\%'' and ``S122-15\%'' correspond to the Post-SCOTUS Section 122 regimes. Values are computed at HTS-10 granularity and aggregated to GTAP sectors using import-weighted averages.\\
+\textit{Source:} Authors' calculation using the Yale Budget Lab model \cite{yalebudgetlab_model} applied to Indonesia data (Census country code 5600).
+\end{minipage}
+\label{tab:top10sectors}
+\end{table}
+
+Several patterns are noteworthy. Wearing apparel (\$4.40B) and leather products (\$3.29B), Indonesia's two largest export sectors, face a flat 19.0\% under the deal but drop to 15.0\% under S122-15\%---a modest improvement for labor-intensive manufacturing. Conversely, rubber and plastics (rpp, \$1.99B) face 24.9\% under S122-15\% compared to 14.4\% under the deal, reflecting the Section 232 overlap for certain rubber-metal composite products. Electrical equipment (ele, \$2.52B) sees its ETR \textit{increase} from 12.7\% to 18.4\%, as the flat Section 122 tariff replaces deal-specific exemptions that lowered certain electronics rates.
+
+%----------------------------------------------------------------------
+\section{What GTAP Can Add}
+\label{sec:gtap_value}
+%----------------------------------------------------------------------
+
+\subsection{GTAP Overview}
+
+The Global Trade Analysis Project (GTAP) is a multi-region, multi-sector computable general equilibrium (CGE) model maintained at Purdue University \cite{hertel1997}. The current version, GTAP 12, features:
+
+\begin{itemize}
+    \item \textbf{145 countries/regions}, including Indonesia as a separately identified region (``IDN'')
+    \item \textbf{65 sectors} covering agriculture, manufacturing, and services
+    \item \textbf{Bilateral trade flows} at the sector level between all region pairs
+    \item \textbf{Factor markets}: land, unskilled labor, skilled labor, capital, natural resources
+    \item \textbf{Armington structure}: products differentiated by origin, with substitution governed by estimated elasticities
+\end{itemize}
+
+Indonesia is a standard GTAP region with a complete Social Accounting Matrix (SAM), making it directly usable without custom aggregation for the country itself \cite{aguiar2022}.
+
+\subsection{General Equilibrium Effects Missing from PE Analysis}
+
+A GTAP simulation would complement the existing ETR analysis by quantifying:
+
+\begin{enumerate}
+    \item \textbf{GDP impact}: Aggregate output contraction from the tariff shock. The current PE analysis shows tariff rates but cannot translate these into GDP effects because it holds production volumes fixed.
+
+    \item \textbf{Trade diversion}: Under the S122 regime, all US trading partners face the same 15\% tariff. But countries like Vietnam (which faced 46\% under IEEPA) and Bangladesh (which faced 37\%) may gain relative competitiveness. GTAP can quantify how US import shares reallocate across suppliers.
+
+    \item \textbf{Welfare (equivalent variation)}: GTAP decomposes welfare changes into allocative efficiency effects, terms-of-trade effects, and investment-savings imbalance effects. This is critical for assessing whether Indonesia is better or worse off under S122 vs.\ the deal.
+
+    \item \textbf{Factor market effects}: Indonesian textiles and apparel employ approximately 4 million workers directly. A tariff change propagates through wages, employment, and capital returns across sectors. GTAP models these factor market adjustments.
+
+    \item \textbf{Third-country effects}: Indonesia's trade with the EU, RCEP partners, and China may shift as resources reallocate away from US-bound exports. GTAP captures these general equilibrium spillovers.
+
+    \item \textbf{Terms of trade}: Indonesia's 85\% share of the US refined palm oil market implies limited substitution. GTAP's Armington framework can estimate how much of the tariff burden falls on Indonesian producers vs.\ US consumers, depending on the substitution elasticity.
+\end{enumerate}
+
+\subsection{Key GTAP Output Variables}
+
+Table~\ref{tab:gtap_vars} lists the main GTAP output variables relevant to the Indonesia analysis.
+
+\begin{table}[htbp]
+\centering
+\caption{Key GTAP Output Variables for Indonesia Analysis}
+\begin{tabular}{lll}
+\toprule
+\textbf{Variable} & \textbf{Description} & \textbf{Policy Relevance} \\
+\midrule
+\texttt{qgdp}  & \% change in real GDP         & Headline macro impact \\
+\texttt{EV}     & Equivalent variation (\$M)    & Welfare measure \\
+\texttt{tot}    & Terms of trade (\% change)    & Producer vs.\ consumer burden \\
+\texttt{qo}     & Sectoral output (\% change)   & Sector restructuring \\
+\texttt{qxwreg} & Export volume by destination   & Trade diversion \\
+\texttt{pf}     & Factor price (\% change)      & Wage/capital effects \\
+\texttt{vxwd}   & Export value at world prices   & Revenue impact \\
+\bottomrule
+\end{tabular}
+\par\smallskip
+\begin{minipage}{\linewidth}
+\footnotesize
+\textit{Source:} GTAP model documentation \cite{hertel1997}.
+\end{minipage}
+\label{tab:gtap_vars}
+\end{table}
+
+%----------------------------------------------------------------------
+\section{Technical Feasibility Assessment}
+\label{sec:feasibility}
+%----------------------------------------------------------------------
+
+This section constitutes the core of the report. We assess each component of the data bridge from Yale ETR outputs to GTAP simulation inputs.
+
+\subsection{The Data Bridge: Yale ETRs to GTAP Shocks}
+
+The Yale model outputs CSV files with columns: \texttt{gtap\_code}, \texttt{description}, \texttt{imports}, and \texttt{etr}. A GTAP tariff shock on imports (\texttt{tms}) requires the format:
+
+\begin{verbatim}
+Shock tms("sector","importer","exporter") = rate_in_pp;
+\end{verbatim}
+
+\noindent The transformation from Yale output to GTAP shock is straightforward:
+
+\begin{enumerate}
+    \item Read the \texttt{etrs\_by\_sector\_\{scenario\}.csv} file
+    \item Multiply the ETR by 100 to convert from decimal to percentage points
+    \item Map the Yale partner identifier to GTAP region codes (replace ``ROW'' context with ``IDN'' since our custom script already isolates Indonesia)
+    \item Format as GTAP \texttt{tms} shock commands with exporter = ``IDN'' and importer = ``USA''
+\end{enumerate}
+
+\noindent For example, the wearing apparel sector under the S122-15\% scenario:
+\begin{verbatim}
+! Yale output: wap, Wearing apparel, 4403456981, 0.15
+! GTAP shock:
+Shock tms("wap","USA","IDN") = 15.00;
+\end{verbatim}
+
+This is a trivial data transformation. We provide a proof-of-concept R script (\texttt{generate\_gtap\_shocks\_indonesia.R}) that performs this conversion for all scenarios. The script is documented in the companion materials.
+
+\subsection{GTAP Database Requirements}
+
+Running a GTAP simulation requires:
+
+\begin{itemize}
+    \item \textbf{GTAP 12 Database}: The latest version (reference year 2023), available from the GTAP Center at Purdue University. Academic licenses cost approximately \$400.
+    \item \textbf{Custom aggregation}: The full 145-region, 65-sector database must be aggregated to a manageable size. We recommend a 7-region aggregation:
+    \begin{enumerate}
+        \item IDN (Indonesia)
+        \item USA (United States)
+        \item CHN (China)
+        \item ASEAN-ex-IDN (ASEAN minus Indonesia)
+        \item EU27 (European Union)
+        \item JPN (Japan)
+        \item ROW (Rest of World)
+    \end{enumerate}
+    This aggregation preserves the key bilateral relationships and competitor regions while keeping the model tractable.
+    \item \textbf{Sector aggregation}: The 65 GTAP sectors can be retained in full or partially aggregated. Since the Yale model uses a 48-code GTAP mapping (of which 33 appear in Indonesia's data), compatibility is high.
+\end{itemize}
+
+\subsection{Software Options}
+
+Three main software platforms can run GTAP simulations:
+
+\begin{table}[htbp]
+\centering
+\caption{Software Options for GTAP Simulation}
+\begin{tabular}{lcll}
+\toprule
+\textbf{Software} & \textbf{Cost} & \textbf{Strengths} & \textbf{Limitations} \\
+\midrule
+RunGTAP  & Free     & GUI-based, beginner-friendly & Limited customization \\
+GEMPACK  & $\sim$\$2,000 & Industry standard, flexible  & Steep learning curve \\
+GAMS     & $\sim$\$3,000 & General-purpose, well-documented & Overkill for standard GTAP \\
+\bottomrule
+\end{tabular}
+\label{tab:software}
+\end{table}
+
+\noindent For a proof-of-concept, RunGTAP (free, limited version) is sufficient. For publication-quality results, GEMPACK is the standard choice in the GTAP community.
+
+\subsection{Aggregation Compatibility}
+
+The Yale model maps HTS-10 codes to GTAP sectors using a crosswalk file. The 48 GTAP codes used in the Yale mapping are a subset of GTAP's standard 65-sector scheme (some sectors like services have no merchandise trade). We verified that all 33 GTAP sector codes appearing in Indonesia's output data are valid GTAP 12 sector identifiers. No recoding is necessary.
+
+\subsection{Scenario Design}
+
+We propose three GTAP simulation scenarios matching the policy brief:
+
+\begin{enumerate}
+    \item \textbf{S122 at 15\% (current)}: The February 21, 2026 regime---flat 15\% Section 122 tariff on all partners, plus Section 232 on covered products.
+    \item \textbf{Post-Deal (ART)}: The February 19, 2026 deal---19\% reciprocal with 1,819 zero-tariff exemptions for Indonesia, different rates for other partners.
+    \item \textbf{Baseline/Expiry}: The pre-crisis or post-expiry scenario---MFN rates only (no reciprocal or S122 tariffs), providing the counterfactual.
+\end{enumerate}
+
+\subsection{Multi-Country Shocks}
+
+For trade diversion analysis, the simulation must apply tariff shocks to \textit{all} US trading partners simultaneously, not just Indonesia. Under S122, this means applying 15\% to all partners (with Section 232 overrides). Under the deal scenario, Indonesia receives 19\% while other partners receive their country-specific rates. The Yale model's standard output already provides these global shocks, which can be used alongside the Indonesia-specific results.
+
+\subsection{Closure Recommendations}
+
+We recommend:
+\begin{itemize}
+    \item \textbf{Standard GTAP closure}: Fixed endowments, flexible prices, competitive markets
+    \item \textbf{Sensitivity analysis on Armington elasticities}: This is critical for sectors where Indonesia has dominant market share. The standard GTAP Armington elasticity for vegetable oils ($\sigma_M \approx 4.4$) may overstate the ease of substitution given Indonesia's 85\% palm oil market share. Similarly, rubber ($\sigma_M \approx 3.8$) deserves scrutiny given Indonesia's 48\% share. We recommend running low-elasticity ($\sigma_M / 2$) and high-elasticity ($2\sigma_M$) variants.
+    \item \textbf{Capital mobility}: For the baseline scenario, assume intersectoral capital mobility. For the short-run S122 scenario (150-day duration), consider sector-specific capital to reflect adjustment costs.
+\end{itemize}
+
+%----------------------------------------------------------------------
+\section{Proposed Workflow}
+\label{sec:workflow}
+%----------------------------------------------------------------------
+
+\subsection{Pipeline Overview}
+
+The end-to-end pipeline from raw trade data to GTAP results proceeds in six stages:
+
+\begin{enumerate}
+    \item \textbf{Census Bureau data} $\rightarrow$ HTS-10 import data for Indonesia (and all partners)
+    \item \textbf{Yale ETR model} $\rightarrow$ Tariff rates by GTAP sector and scenario
+    \item \textbf{Shock converter script} $\rightarrow$ GTAP-formatted \texttt{tms} shock commands
+    \item \textbf{GTAP database + aggregation} $\rightarrow$ Customized regional/sectoral database
+    \item \textbf{GTAP simulation} $\rightarrow$ Model solution across scenarios
+    \item \textbf{Result extraction} $\rightarrow$ Indonesia-specific GDP, welfare, trade, and factor market effects
+\end{enumerate}
+
+\noindent Each stage builds on the previous. Stages 1--3 are already operational (the Yale model and our converter script). Stages 4--6 require the GTAP database and simulation software.
+
+\subsection{Step-by-Step Implementation}
+
+\textbf{Stage 1: Generate Indonesia-specific GTAP shock files.}
+Run the proof-of-concept script (\texttt{generate\_gtap\_shocks\_indonesia.R}) on the existing Yale outputs. This produces \texttt{.txt} files with GTAP \texttt{tms} shock commands for each scenario. This stage is complete---the script is provided as a companion deliverable.
+
+\textbf{Stage 2: Generate global tariff shocks.}
+Run the standard Yale model for all partner regions to obtain the full set of bilateral tariff shocks. This ensures that trade diversion effects are captured: when Indonesia faces 15\% under S122, so does Vietnam, Bangladesh, the EU, etc.
+
+\textbf{Stage 3: Acquire and prepare the GTAP 12 database.}
+Purchase the GTAP 12 database (academic license, $\sim$\$400). Use the GTAPAgg tool to create the 7-region aggregation (IDN, USA, CHN, ASEAN-ex-IDN, EU27, JPN, ROW). Validate that the aggregated database reproduces known trade statistics.
+
+\textbf{Stage 4: Set up the simulation.}
+Import the aggregated database into RunGTAP or GEMPACK. Define the closure (standard GTAP or short-run variant). Load the shock files from Stage 1--2.
+
+\textbf{Stage 5: Execute scenarios.}
+Run the three scenarios (S122-15\%, Post-Deal, Baseline). For each, extract the full solution file.
+
+\textbf{Stage 6: Extract and report Indonesia-specific results.}
+From the solution files, extract: \texttt{qgdp} for Indonesia, \texttt{EV} for Indonesia, bilateral trade changes (\texttt{qxwreg}) for Indonesia-USA, factor price changes (\texttt{pf}) by factor and sector, and sectoral output changes (\texttt{qo}). Compare across scenarios.
+
+%----------------------------------------------------------------------
+\section{Limitations and Caveats}
+\label{sec:limitations}
+%----------------------------------------------------------------------
+
+\subsection{Perfect Competition Assumption}
+
+The standard GTAP model assumes perfect competition and constant returns to scale in all sectors. This is a significant limitation for Indonesia's key export sectors:
+
+\begin{itemize}
+    \item \textbf{Textiles and electronics} exhibit increasing returns to scale (IRS). The Melitz-type firm heterogeneity extension \cite{melitz2003} would better capture the intensive margin response (firm exit vs.\ price adjustment).
+    \item \textbf{Palm oil processing} has oligopolistic features: a few large Indonesian firms dominate global supply. Standard GTAP may understate the terms-of-trade effect.
+\end{itemize}
+
+\noindent Imperfect competition variants of GTAP exist (e.g., GTAP-HET) but require additional calibration.
+
+\subsection{Static Model}
+
+Standard GTAP is a comparative static model---it compares two long-run equilibria but does not model the transition path between them. This is particularly limiting for the S122 scenario, which has a statutory 150-day duration. A static model cannot distinguish between:
+
+\begin{itemize}
+    \item A permanent 15\% tariff (full adjustment)
+    \item A 150-day temporary tariff (limited adjustment, inventory effects)
+\end{itemize}
+
+\noindent Dynamic GTAP (GDyn) addresses this by modeling investment and capital accumulation over time, but requires additional data and expertise.
+
+\subsection{Armington Elasticity Sensitivity}
+
+The GTAP results are highly sensitive to Armington substitution elasticities, which govern how easily importers switch between suppliers. For sectors where Indonesia has dominant market share:
+
+\begin{itemize}
+    \item \textbf{Palm oil (85\% of US imports)}: The standard elasticity implies significant substitution possibilities, but in practice, US buyers have limited alternatives (Malaysia is the main competitor, but at much smaller scale). The model may overstate trade diversion.
+    \item \textbf{Rubber (48\% of US imports)}: Competition from synthetic rubber and alternative natural rubber sources (Thailand, Vietnam) is more plausible. The standard elasticity may be more appropriate here.
+\end{itemize}
+
+\noindent Sensitivity analysis with low and high elasticities is essential for these sectors.
+
+\subsection{Sectoral Aggregation Loss}
+
+The Yale model computes ETRs at HTS-10 granularity (4,921 lines for Indonesia) and aggregates to 33 GTAP sectors. Within each GTAP sector, the import-weighted average ETR may conceal substantial within-sector heterogeneity. For example, the ``Electronic equipment'' (eeq) sector includes both semiconductor components (low tariff) and consumer electronics (higher tariff). The GTAP simulation operates at the sector level and cannot capture this within-sector variation.
+
+\subsection{Base Year Mismatch}
+
+The GTAP 12 database uses 2023 as its reference year. The Yale model uses 2024 Census Bureau import data. Trade volumes, prices, and bilateral shares may have shifted between 2023 and 2024. This mismatch is standard in CGE analysis and generally considered minor for short time horizons.
+
+\subsection{Deal Exemption Averaging}
+
+Under the Post-Deal scenario, 1,819 tariff lines receive zero reciprocal tariff exemptions. When aggregated to GTAP sectors, these exemptions are averaged with non-exempt lines within each sector, producing a blended ETR. The GTAP simulation applies this blended rate to the entire sector, which may overstate the tariff on exempt products and understate it on non-exempt products within the same sector.
+
+%----------------------------------------------------------------------
+\section{Alternative Approaches}
+\label{sec:alternatives}
+%----------------------------------------------------------------------
+
+While GTAP provides the most comprehensive framework, several alternative or complementary approaches merit consideration:
+
+\begin{enumerate}
+    \item \textbf{SMART/WITS (Partial Equilibrium)}:
+    The World Bank's SMART model within WITS (World Integrated Trade Solution) provides product-level partial equilibrium analysis. It offers finer granularity (HS-6 level) than GTAP but cannot capture general equilibrium feedbacks. SMART would be a useful complement for detailed product-level trade creation and diversion estimates.
+
+    \item \textbf{MIRAGE (Imperfect Competition CGE)}:
+    The MIRAGE model (Modelling International Relationships in Applied General Equilibrium), developed by CEPII, incorporates imperfect competition and firm heterogeneity. It would better capture the textiles and electronics sectors but requires access to the MIRAGE framework and additional calibration.
+
+    \item \textbf{Gravity Model (Econometric Validation)}:
+    A structural gravity model could provide an econometric cross-check on the CGE results, particularly for trade diversion estimates. Gravity models are well-suited to estimating bilateral trade effects of tariff changes and can serve as a validation tool for GTAP predictions.
+
+    \item \textbf{Partial Equilibrium with Export Supply Elasticities}:
+    A middle ground between the current ETR analysis and full GTAP would be to apply export supply elasticities to the ETR calculations. This would estimate the quantity response (how much Indonesian exports decline) without requiring a full CGE framework. This is the quickest complement to the existing analysis.
+\end{enumerate}
+
+%----------------------------------------------------------------------
+\section{Resource Requirements and Recommendations}
+\label{sec:resources}
+%----------------------------------------------------------------------
+
+\subsection{Cost Estimates}
+
+\begin{table}[htbp]
+\centering
+\caption{Minimum Resource Requirements}
+\begin{tabular}{lrl}
+\toprule
+\textbf{Item} & \textbf{Cost} & \textbf{Notes} \\
+\midrule
+GTAP 12 Database (academic)   & \$400  & Required \\
+RunGTAP (limited version)     & Free   & Sufficient for proof-of-concept \\
+GEMPACK (full version)        & \$2,000 & For publication-quality analysis \\
+R/RStudio                     & Free   & Already in use \\
+\midrule
+\textbf{Minimum total}        & \textbf{\$400} & With RunGTAP \\
+\textbf{Full capability}      & \textbf{\$2,400} & With GEMPACK \\
+\bottomrule
+\end{tabular}
+\label{tab:costs}
+\end{table}
+
+\subsection{Timeline}
+
+\begin{itemize}
+    \item \textbf{4--6 weeks} with prior GTAP/CGE modeling experience
+    \item \textbf{8--10 weeks} including learning time for researchers new to GTAP
+\end{itemize}
+
+\noindent The R programming component (data bridge, shock generation) is already demonstrated. The bottleneck is GTAP database acquisition and model setup.
+
+\subsection{Expertise Requirements}
+
+\begin{itemize}
+    \item \textbf{R programming}: Demonstrated in the current project
+    \item \textbf{GTAP/CGE modeling}: May require collaboration with a CGE specialist. Indonesian institutions with GTAP experience include the Centre for Strategic and International Studies (CSIS), the Institute for Economic and Social Research (LPEM-UI), and Bappenas
+    \item \textbf{Trade policy analysis}: Understanding of tariff structures, stacking rules, and scenario design---demonstrated in the current project
+\end{itemize}
+
+\subsection{Recommendations}
+
+\begin{enumerate}
+    \item \textbf{Immediate}: Run the proof-of-concept shock converter script to validate the data bridge. This is already complete.
+
+    \item \textbf{Short-term}: Acquire the GTAP 12 database (\$400). Set up a minimal simulation using RunGTAP (free) with the S122-15\% scenario to obtain preliminary GDP and welfare estimates for Indonesia.
+
+    \item \textbf{Medium-term}: Consider dynamic GTAP (GDyn) to model the Section 122 temporality (150-day duration). This would better capture the distinction between a temporary tariff shock and a permanent regime change.
+
+    \item \textbf{Complementary}: Run SMART partial equilibrium analysis in parallel to obtain product-level trade creation and diversion estimates. This provides a cross-check on the GTAP results and offers finer granularity for policy advice.
+\end{enumerate}
+
+%----------------------------------------------------------------------
+% References
+%----------------------------------------------------------------------
+
+\begin{thebibliography}{99}
+
+\bibitem{wicaksono2026}
+Wicaksono, T.Y., Artha, R.P., and Vermonte, P.J., ``Indonesia Tariff Agreement After the US Supreme Court and President Trump Debacle: What It Means for Indonesia,'' UIII Policy Brief, February 2026.
+
+\bibitem{yalebudgetlab_model}
+Yale Budget Lab, \textit{Tariff-ETRs}: Open-Source Effective Tariff Rate Model, GitHub.
+\url{https://github.com/Budget-Lab-Yale/Tariff-ETRs}
+
+\bibitem{yalebudgetlab2026}
+Yale Budget Lab, ``State of U.S.\ Tariffs,'' February 20, 2026.
+\url{https://budgetlab.yale.edu/research/state-us-tariffs}
+
+\bibitem{hertel1997}
+Hertel, T.W. (ed.), \textit{Global Trade Analysis: Modeling and Applications}, Cambridge University Press, 1997.
+
+\bibitem{aguiar2022}
+Aguiar, A., Chepeliev, M., Corong, E.L., McDougall, R., and van der Mensbrugghe, D., ``The GTAP Data Base: Version 11,'' \textit{Journal of Global Economic Analysis}, 7(2), 2022.
+
+\bibitem{armington1969}
+Armington, P.S., ``A Theory of Demand for Products Distinguished by Place of Production,'' \textit{IMF Staff Papers}, 16(1), 159--178, 1969.
+
+\bibitem{melitz2003}
+Melitz, M.J., ``The Impact of Trade on Intra-Industry Reallocations and Aggregate Industry Productivity,'' \textit{Econometrica}, 71(6), 1695--1725, 2003.
+
+\bibitem{census2024}
+U.S.\ Census Bureau, \textit{Foreign Trade --- U.S.\ Trade in Goods with Indonesia}, 2024.
+\url{https://www.census.gov/foreign-trade/balance/c5600.html}
+
+\bibitem{usitc_dataweb}
+USITC DataWeb, HTS-level U.S.\ import statistics.
+\url{https://dataweb.usitc.gov}
+
+\bibitem{scotus2026}
+\textit{Learning Resources, Inc.\ v.\ Trump}, 607 U.S.\ \_\_\_ (2026).
+
+\bibitem{s122_statute}
+Trade Act of 1974, \S 122, codified at 19 U.S.C.\ \S 2132.
+
+\bibitem{art2026}
+Agreement of Reciprocal Trade (ART), United States--Indonesia, signed February 19, 2026.
+
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,551 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{caption}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+\title{\textbf{Effective Tariff Rate Analysis: US Tariffs on Indonesian Exports After the SCOTUS IEEPA Ruling}}
+\author{Teguh Wicaksono\\
+Faculty of Economics and Business,\\
+Universitas Islam Internasional Indonesia (UIII)}
+\date{February 21, 2026}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\newpage
+
+%----------------------------------------------------------------------
+\section{Executive Summary}
+%----------------------------------------------------------------------
+
+On February 20, 2026, the US Supreme Court struck down President Trump's use of the International Emergency Economic Powers Act (IEEPA) to impose reciprocal tariffs, just one day after Indonesia and the United States finalized a landmark bilateral trade agreement negotiated under that same authority. This report calculates effective tariff rates (ETR) across four distinct scenarios to assess the shifting tariff landscape for Indonesian exports.
+
+\subsection{Key ETR Findings}
+
+\begin{table}[htbp]
+\centering
+\caption{Effective Tariff Rates Across Scenarios}
+\begin{tabular}{llcc}
+\toprule
+\textbf{Scenario} & \textbf{Period} & \textbf{ETR} & \textbf{Change from Baseline} \\
+\midrule
+1. Baseline & Pre-April 2025 & 5.0\% & -- \\
+2. Liberation Day & April 2--9, 2025 & 36.6\% & +31.6 pp \\
+3. Post-Deal & Aug 2025 -- Feb 19, 2026 & 19.7\% & +14.7 pp \\
+4. Post-SCOTUS & Feb 20, 2026+ & 15.3\% & +10.3 pp \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Key Takeaways}
+
+\begin{enumerate}
+    \item \textbf{The SCOTUS ruling reduces Indonesia's overall ETR} from 19.7\% (Post-Deal) to 15.3\% (Post-SCOTUS), a 4.4 percentage point decline. The flat 10\% Section 122 tariff is lower than the 19\% reciprocal tariff that applied to most non-exempted products.
+
+    \item \textbf{Key commodity exporters lose protection.} Palm oil, rubber, coffee, cocoa, and spice exporters enjoyed 0\% reciprocal tariff exemptions under the deal. They now face the uniform 10\% Section 122 tariff.
+
+    \item \textbf{Textiles, footwear, and furniture exporters benefit.} These sectors see tariffs drop from 29--30\% (MFN + 19\% reciprocal, with partial TRQ relief for textiles) to 22\% (MFN + 10\% S122).
+
+    \item \textbf{Section 232 tariffs on steel and aluminum are unaffected} at 50\%, as they derive from a separate legal authority.
+
+    \item \textbf{Section 122 is temporary.} The 150-day statutory limit expires around July 2026. Without congressional action, non-232 tariffs could revert toward baseline.
+
+    \item \textbf{The legal status of the Feb 19 deal is uncertain.} Its terms were negotiated under now-invalidated IEEPA authority, raising questions about enforceability of Indonesia's concessions.
+\end{enumerate}
+
+%----------------------------------------------------------------------
+\section{Background: The US--Indonesia Trade Relationship}
+%----------------------------------------------------------------------
+
+\subsection{Trade Overview (2024)}
+
+Indonesia is America's 16th-largest goods trading partner. In 2024:
+
+\begin{itemize}
+    \item \textbf{US imports from Indonesia:} \$28.05 billion (Census basis)
+    \item \textbf{US exports to Indonesia:} \$10.16 billion
+    \item \textbf{US trade deficit with Indonesia:} \$17.9 billion (up 5.7\% from 2023)
+\end{itemize}
+
+\subsection{Top Indonesian Export Sectors to the US}
+
+\begin{table}[htbp]
+\centering
+\caption{Top Indonesian Export Sectors to the US (2024)}
+\begin{tabular}{clccc}
+\toprule
+\textbf{Rank} & \textbf{Sector} & \textbf{HS Chapters} & \textbf{Value (\$B)} & \textbf{Share} \\
+\midrule
+1 & Electrical/Electronics & 85 & 4.51 & 16.1\% \\
+2 & Footwear & 64 & 2.57 & 9.2\% \\
+3 & Knitted Apparel & 61 & 2.20 & 7.8\% \\
+4 & Woven Apparel & 62 & 2.02 & 7.2\% \\
+5 & Rubber & 40 & 1.96 & 7.0\% \\
+6 & Palm Oil/Fats & 15 & 1.74 & 6.2\% \\
+7 & Furniture & 94 & 1.57 & 5.6\% \\
+8 & Machinery & 84 & 1.01 & 3.6\% \\
+9 & Mineral Fuels & 27 & 0.90 & 3.2\% \\
+10 & Fish Preparations & 16 & 0.79 & 2.8\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Indonesia holds dominant US market positions in several products: refined palm oil (85.1\%), industrial oleic acid (80.6\%), cinnamon (80.1\%), technically specified natural rubber (48\%), and crabs (46.8\%).
+
+\subsection{Chronology of the Tariff Crisis}
+
+\begin{table}[htbp]
+\centering
+\caption{Chronology of the Tariff Crisis}
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Date} & \textbf{Event} \\
+\midrule
+April 2, 2025 & ``Liberation Day'' executive order: 32\% reciprocal tariff on Indonesia via IEEPA \\
+April 9, 2025 & 90-day pause announced for countries entering negotiations \\
+June 2025 & Section 232 tariffs on steel/aluminum doubled from 25\% to 50\% \\
+July 7, 2025 & Trump letter threatening reimposition of 32\% if no deal \\
+July 22, 2025 & US--Indonesia framework agreement: reduced to 19\% \\
+August 1, 2025 & 19\% reciprocal tariff takes effect \\
+February 19, 2026 & Bilateral Agreement of Reciprocal Trade (ART) finalized; 1,819 tariff lines exempted; Freeport MoU signed \\
+February 20, 2026 & SCOTUS strikes down IEEPA tariffs 6--3 in \textit{Learning Resources v.\ Trump}; Trump invokes Section 122 at 10\% \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+%----------------------------------------------------------------------
+\section{The SCOTUS Decision: \textit{Learning Resources, Inc.\ v.\ Trump}}
+%----------------------------------------------------------------------
+
+\subsection{The Ruling}
+
+In a 6--3 decision authored by Chief Justice Roberts, the Supreme Court held that ``IEEPA does not authorize the president to impose tariffs.'' The majority---Roberts, Sotomayor, Kagan, Gorsuch, Barrett, and Jackson---reasoned that:
+
+\begin{itemize}
+    \item IEEPA contains no reference to tariffs or duties
+    \item Congress has never used the word ``regulate'' to authorize taxation
+    \item No president had previously interpreted IEEPA as conferring tariff power
+    \item The Constitution grants tariff authority to ``Congress alone'' (Art.\ I, Sec.\ 8)
+\end{itemize}
+
+Thomas and Kavanaugh (joined by Alito) dissented.
+
+\subsection{What Survives vs.\ What Falls}
+
+\begin{table}[htbp]
+\centering
+\caption{Legal Authorities: What Survives vs.\ What Falls}
+\begin{tabularx}{\textwidth}{XX}
+\toprule
+\textbf{Survives} & \textbf{Falls} \\
+\midrule
+Section 232 tariffs (steel, aluminum, autos) & All IEEPA reciprocal tariffs \\
+Section 301 tariffs (China) & IEEPA universal baseline tariff \\
+Anti-dumping / countervailing duties & Country-specific bilateral deals under IEEPA \\
+Tariff Act of 1930 duties & \\
+Section 122 (newly invoked at 10\%) & \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{The Section 122 Pivot}
+
+Within hours of the ruling, the Trump administration invoked Section 122 of the Trade Act of 1974 (19 U.S.C.\ \S 2132), imposing a 10\% global tariff. Key constraints:
+
+\begin{itemize}
+    \item \textbf{Maximum rate:} 15\% ad valorem
+    \item \textbf{Maximum duration:} 150 days without congressional authorization
+    \item \textbf{No country differentiation:} Must apply uniformly
+    \item \textbf{Trigger:} Presidential determination of ``large and serious'' balance-of-payments deficit
+    \item \textbf{Historic first:} Section 122 has never before been used to impose tariffs
+\end{itemize}
+
+\subsection{Financial Impact}
+
+\begin{itemize}
+    \item Tariffs raised over \textbf{\$160 billion} through the IEEPA tariffs before the ruling
+    \item The now-invalidated tariffs would have generated \textbf{\$1.4 trillion} from 2026--2035
+    \item The Court left open the question of \textbf{refunds} for duties already collected
+\end{itemize}
+
+%----------------------------------------------------------------------
+\section{ETR Analysis: Methodology and Results}
+%----------------------------------------------------------------------
+
+\subsection{Methodology}
+
+Effective Tariff Rate (ETR) is calculated as:
+
+\begin{equation}
+\text{ETR} = \frac{\sum_{i} (\text{applicable\_rate}_i \times \text{import\_value}_i)}{\sum_{i} \text{import\_value}_i}
+\end{equation}
+
+\noindent where $i$ denotes each HTS-2 chapter, and the applicable rate for each chapter incorporates:
+
+\begin{itemize}
+    \item \textbf{MFN tariff rate} (baseline duty from the Harmonized Tariff Schedule)
+    \item \textbf{Section 232 tariff} (steel 50\%, aluminum 50\%, autos 25\%)
+    \item \textbf{Reciprocal tariff} (32\% Liberation Day, 19\% Post-Deal) or \textbf{Section 122} (10\% Post-SCOTUS)
+\end{itemize}
+
+\noindent\textbf{Stacking rule} (per Yale Budget Lab methodology): Section 232 and reciprocal/Section 122 tariffs are mutually exclusive; the higher additional rate applies. Products are not double-charged.
+
+\subsection{Scenario Definitions}
+
+\textbf{Scenario 1: Baseline (Pre-April 2025)}
+\begin{itemize}
+    \item MFN rates only for most products
+    \item Section 232 at 25\% on steel (HS 72--73) and aluminum (HS 76)
+    \item No reciprocal tariffs
+\end{itemize}
+
+\textbf{Scenario 2: Liberation Day (April 2--9, 2025)}
+\begin{itemize}
+    \item 32\% IEEPA reciprocal tariff on all Indonesian products
+    \item Section 232 at 25\% (superseded by higher 32\% reciprocal)
+    \item Effectively MFN + 32\% across the board
+\end{itemize}
+
+\textbf{Scenario 3: Post-Deal (August 2025 -- February 19, 2026)}
+\begin{itemize}
+    \item 19\% reciprocal tariff (reduced from 32\%)
+    \item 1,819 tariff lines exempted at 0\% reciprocal (palm oil, rubber, coffee, cocoa, spices, semiconductor components)
+    \item Textile TRQ: $\sim$10\% of HS 61--62 trade at MFN-only (conditional on US-sourced raw materials); remaining 90\% at MFN + 19\%
+    \item Section 232 increased to 50\% on steel/aluminum (higher than 19\%, so 232 applies)
+    \item Section 232 at 25\% on autos
+\end{itemize}
+
+\textbf{Scenario 4: Post-SCOTUS (February 20, 2026+)}
+\begin{itemize}
+    \item 10\% Section 122 tariff (flat, global, no exemptions)
+    \item Section 232 at 50\% on steel/aluminum (higher than 10\%, so 232 applies)
+    \item Section 232 at 25\% on autos
+    \item All IEEPA-based exemptions voided
+\end{itemize}
+
+\subsection{Overall ETR Results}
+
+\begin{table}[htbp]
+\centering
+\caption{Overall Effective Tariff Rate Results}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Scenario} & \textbf{ETR} & \textbf{Total Estimated Duty (\$B)} \\
+\midrule
+1. Baseline & 5.0\% & \$1.40 \\
+2. Liberation Day & 36.6\% & \$10.26 \\
+3. Post-Deal & 19.7\% & \$5.53 \\
+4. Post-SCOTUS & 15.3\% & \$4.30 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Sector-Level ETR Comparison}
+
+\begin{table}[htbp]
+\centering
+\caption{Sector-Level ETR Comparison}
+\small
+\begin{tabular}{lccccccr}
+\toprule
+\textbf{Sector} & \textbf{HS} & \textbf{Value (\$B)} & \textbf{Base} & \textbf{Lib.\ Day} & \textbf{Post-Deal} & \textbf{Post-SCOTUS} & \textbf{Impact} \\
+\midrule
+Electronics & 85 & 4.51 & 1.8\% & 33.8\% & 14.1\% & 11.8\% & $-$2.3 pp \\
+Footwear & 64 & 2.57 & 11.0\% & 43.0\% & 30.0\% & 21.0\% & $-$9.0 pp \\
+Knitted Apparel & 61 & 2.20 & 12.0\% & 44.0\% & 29.1\% & 22.0\% & $-$7.1 pp \\
+Woven Apparel & 62 & 2.02 & 12.0\% & 44.0\% & 29.1\% & 22.0\% & $-$7.1 pp \\
+\textbf{Rubber} & \textbf{40} & \textbf{1.96} & \textbf{3.0\%} & \textbf{35.0\%} & \textbf{3.0\%} & \textbf{13.0\%} & \textbf{+10.0 pp} \\
+\textbf{Palm Oil} & \textbf{15} & \textbf{1.74} & \textbf{2.0\%} & \textbf{34.0\%} & \textbf{2.0\%} & \textbf{12.0\%} & \textbf{+10.0 pp} \\
+Furniture & 94 & 1.57 & 1.5\% & 33.5\% & 20.5\% & 11.5\% & $-$9.0 pp \\
+Machinery & 84 & 1.01 & 1.5\% & 33.5\% & 20.5\% & 11.5\% & $-$9.0 pp \\
+\textbf{Coffee/Spices} & \textbf{09} & \textbf{0.50} & \textbf{1.5\%} & \textbf{33.5\%} & \textbf{1.5\%} & \textbf{11.5\%} & \textbf{+10.0 pp} \\
+\textbf{Cocoa} & \textbf{18} & \textbf{0.32} & \textbf{3.0\%} & \textbf{35.0\%} & \textbf{3.0\%} & \textbf{13.0\%} & \textbf{+10.0 pp} \\
+Steel & 72--73 & 0.30 & 26.5\% & 34.0\% & 52.0\% & 52.0\% & 0 pp \\
+Aluminum & 76 & 0.20 & 28.0\% & 35.0\% & 53.0\% & 53.0\% & 0 pp \\
+\bottomrule
+\end{tabular}
+\par\smallskip
+\footnotesize\textbf{Bold rows} indicate sectors that face HIGHER tariffs post-SCOTUS due to loss of deal exemptions.
+\end{table}
+
+%----------------------------------------------------------------------
+\section{Impact Assessment}
+%----------------------------------------------------------------------
+
+\subsection{Winners and Losers from the SCOTUS Ruling}
+
+\subsubsection*{Sectors that benefit (lower tariffs post-SCOTUS vs.\ Post-Deal):}
+
+\begin{itemize}
+    \item \textbf{Textiles and apparel} (HS 61--62, \$4.22B): Tariffs drop from 29.1\% (effective rate reflecting partial TRQ) to 22\%, saving an estimated \$300 million annually. This sector employs approximately 4 million workers directly and supports 20 million livelihoods in Indonesia.
+
+    \item \textbf{Footwear} (HS 64, \$2.57B): Tariffs drop from 30\% to 21\%, saving an estimated \$231 million annually.
+
+    \item \textbf{Furniture} (HS 94, \$1.57B): Tariffs drop from 20.5\% to 11.5\%, saving approximately \$141 million.
+
+    \item \textbf{Tin} (HS 80, \$0.15B): Tariffs drop from 19\% to 10\%.
+\end{itemize}
+
+\subsubsection*{Sectors that lose (higher tariffs post-SCOTUS vs.\ Post-Deal):}
+
+\begin{itemize}
+    \item \textbf{Rubber} (HS 40, \$1.96B): Tariffs rise from 3\% (exempted) to 13\%, adding \$196 million in duties.
+
+    \item \textbf{Palm oil} (HS 15, \$1.74B): Tariffs rise from 2\% to 12\%, adding \$174 million in duties. Indonesia supplies 85\% of US refined palm oil---limited substitution possibilities.
+
+    \item \textbf{Coffee and spices} (HS 09, \$0.50B): Tariffs rise from 1.5\% to 11.5\%, adding \$50 million.
+
+    \item \textbf{Cocoa} (HS 18, \$0.32B): Tariffs rise from 3\% to 13\%, adding \$32 million.
+\end{itemize}
+
+\textbf{Net effect}: The overall ETR drops by 4.4 percentage points, reflecting total estimated duty savings of approximately \$1.24 billion on the \$28.05 billion trade base. Manufacturing sectors (which represent the majority of trade) benefit significantly, while commodity/agricultural sectors lose their preferential access.
+
+\subsection{Indonesia's Trade Balance and GDP Implications}
+
+The shift from the deal's effective 19.7\% ETR to the post-SCOTUS 15.3\% ETR provides modest aggregate relief. However, the effect is uneven:
+
+\begin{itemize}
+    \item \textbf{Manufacturing competitiveness}: Indonesian textiles, footwear, and furniture become more price-competitive relative to the deal scenario, though tariffs remain substantially above baseline. These sectors face 10--21 percentage points above pre-crisis levels.
+
+    \item \textbf{Commodity trade disruption}: Palm oil and rubber, which together account for \$3.70 billion (13.2\% of exports to the US), lose their zero-tariff exemptions. For palm oil, where Indonesia dominates US supply (85.1\% market share), buyers have limited alternatives, potentially allowing partial pass-through of the tariff.
+
+    \item \textbf{GDP impact}: The higher tariffs on key exports (relative to baseline) could reduce Indonesia's GDP growth by an estimated 0.1--0.3 percentage points, concentrated in export-dependent sectors and their supply chains.
+\end{itemize}
+
+\subsection{Legal Status of the February 19 Deal}
+
+The Agreement of Reciprocal Trade (ART) signed on February 19, 2026, was negotiated under IEEPA authority that the Supreme Court invalidated the next day. This raises critical questions:
+
+\begin{enumerate}
+    \item \textbf{Is the deal enforceable?} The tariff reductions (19\% with 1,819 zero-tariff lines) were premised on IEEPA authority. Without that statutory basis, the US cannot legally implement the tariff structure as negotiated.
+
+    \item \textbf{Are Indonesia's concessions still binding?} Indonesia agreed to:
+    \begin{itemize}
+        \item \$33 billion in US purchase commitments (energy, Boeing aircraft, agricultural products)
+        \item Elimination of tariffs on 99\% of US products exported to Indonesia
+        \item Extension of Freeport-McMoRan's mining license from 2041 to 2061
+        \item Market access for US agriculture (soybeans, corn, wheat, cotton)
+    \end{itemize}
+    These concessions were given in exchange for tariff terms that can no longer be delivered. International trade law principles of reciprocity suggest Indonesia may have grounds to revisit or withdraw its commitments.
+
+    \item \textbf{The Freeport MoU}: Signed one day before the ruling, this agreement to extend PT Freeport Indonesia's mining license by 20 years represents a significant concession. Its legal status may depend on whether it was structured as a standalone agreement or as part of the broader trade package.
+\end{enumerate}
+
+\subsection{Section 122 Limitations}
+
+Section 122's constraints create significant forward uncertainty:
+
+\begin{itemize}
+    \item \textbf{The 150-day clock}: Starting February 20, 2026, the 10\% tariff expires approximately July 20, 2026, unless Congress authorizes an extension. This creates a narrow window of tariff coverage.
+
+    \item \textbf{No differentiation}: Unlike IEEPA tariffs, Section 122 cannot vary by country. Indonesia receives the same 10\% as Vietnam (which faced 46\% under IEEPA) or the EU (which faced 20\%). This eliminates the leverage for bilateral deal-making.
+
+    \item \textbf{15\% ceiling}: Even if the administration raises the rate, it cannot exceed 15\%---far below the 32\% or 19\% rates previously imposed on Indonesia.
+\end{itemize}
+
+\subsection{Potential Refund Claims}
+
+The Supreme Court's ruling invalidating IEEPA tariffs creates a significant question about the estimated \$200 billion in duties collected under IEEPA authority during 2025--2026. Indonesian exporters (and their US importers) who paid the 32\% or 19\% reciprocal tariffs may have grounds for refund claims through:
+
+\begin{itemize}
+    \item US Court of International Trade protests
+    \item CBP administrative proceedings
+    \item Future congressional legislation addressing collected duties
+\end{itemize}
+
+The Court explicitly left the refund question unresolved, creating potential for years of litigation.
+
+%----------------------------------------------------------------------
+\section{Forward-Looking Scenarios}
+%----------------------------------------------------------------------
+
+\subsection{Scenario A: Congressional Action (Moderate Probability)}
+
+Congress could pass legislation granting the president new tariff authority, potentially through:
+\begin{itemize}
+    \item A revival of ``reciprocal trade'' authority under a new statutory framework
+    \item Amendment to Section 301 to cover bilateral trade imbalances
+    \item A standalone trade act with country-specific rate-setting power
+\end{itemize}
+
+\textbf{Implications for Indonesia}: If Congress acts before the 150-day Section 122 expiry, the administration could reimpose differentiated tariffs. The rate for Indonesia would depend on the new legislation's structure.
+
+\subsection{Scenario B: Section 122 Expiry Without Replacement (Lower Probability)}
+
+If Congress fails to act and the 150-day clock runs out:
+\begin{itemize}
+    \item Non-232 products revert to MFN-only tariffs
+    \item Indonesia's ETR drops back toward the 5.0\% baseline
+    \item Steel/aluminum remain at 50\% (Section 232)
+    \item The US loses most of its tariff leverage in bilateral negotiations
+\end{itemize}
+
+\subsection{Scenario C: Deal Restructuring Under Alternative Authority (Moderate-High Probability)}
+
+The administration could attempt to restructure the Indonesia deal under surviving authorities:
+\begin{itemize}
+    \item \textbf{Section 301}: Requires a formal investigation into unfair trade practices (time-consuming)
+    \item \textbf{Section 201}: Requires US International Trade Commission injury finding (sector-specific)
+    \item \textbf{Section 338}: Authorizes retaliatory tariffs up to 50\% for discriminatory treatment (rarely invoked)
+\end{itemize}
+
+\textbf{Implications}: Any restructuring would take months and likely result in different tariff structures. Indonesia would be negotiating from a stronger position, as the US lacks immediate leverage.
+
+\subsection{Scenario D: Multiple Authority Layering (High Probability in Short Term)}
+
+Treasury Secretary Bessent indicated the administration would combine Section 232, Section 301, Section 122, Section 201, and Section 338 to maintain tariff pressure. This patchwork approach could:
+\begin{itemize}
+    \item Maintain elevated tariffs on specific sectors (steel/aluminum via 232, potentially textiles via 201/301)
+    \item Create legal uncertainty and compliance complexity
+    \item Face immediate legal challenges on the novel use of each authority
+\end{itemize}
+
+%----------------------------------------------------------------------
+\section{Policy Recommendations}
+%----------------------------------------------------------------------
+
+\subsection{For the Indonesian Government}
+
+\begin{enumerate}
+    \item \textbf{Do not prematurely implement deal concessions.} With the legal basis for the ART invalidated, Indonesia should pause implementation of its commitments---particularly tariff reductions on US products and agricultural market access---until the deal's legal framework is clarified.
+
+    \item \textbf{Protect the Freeport MoU's independence.} If the mining license extension was structured as a standalone agreement, it should be maintained on its own merits. If it was conditioned on the broader trade deal, renegotiation leverage exists.
+
+    \item \textbf{Prepare for Section 122 expiry.} Develop contingency plans for three outcomes: congressional renewal, expiry without replacement, or replacement with alternative authority. Begin diplomatic engagement with US congressional leaders.
+
+    \item \textbf{Pursue refund claims.} Coordinate with Indonesian exporters and their US buyers to file CBP protests for duties paid under the now-invalidated IEEPA tariffs. The potential recovery of \$500+ million in duties paid during August 2025--February 2026 should be actively pursued.
+
+    \item \textbf{Diversify export markets.} While US market access remains important, the tariff instability reinforces the need to deepen trade relationships with RCEP partners, the EU (ongoing CEPA negotiations), and emerging markets.
+
+    \item \textbf{Leverage the non-differentiation constraint.} Under Section 122, Indonesia faces the same 10\% as all other countries. This is a more favorable position than under IEEPA, where Indonesia's 19\% was higher than many competitors. Use this window to gain market share.
+\end{enumerate}
+
+\subsection{For Indonesian Businesses}
+
+\begin{enumerate}
+    \item \textbf{Textile and footwear exporters}: Take advantage of the reduced tariff (22\% vs.\ 31\% under the deal) to regain competitive position. Accelerate shipments during the 150-day Section 122 window.
+
+    \item \textbf{Palm oil and rubber exporters}: Prepare for the 10\% tariff by building inventory and exploring hedging strategies. Given Indonesia's dominant market position (85\% for palm oil, 48\% for rubber), some portion of the tariff can be passed through to US buyers.
+
+    \item \textbf{All exporters}: Engage US importers on duty drawback and refund possibilities for IEEPA-period tariffs. Consult customs brokers on filing CBP protests before statutory deadlines.
+
+    \item \textbf{Manufacturers using US inputs}: Monitor whether Indonesia maintains its commitment to reduce tariffs on US products. If Indonesia pauses or reverses these concessions, input costs could remain lower.
+\end{enumerate}
+
+%----------------------------------------------------------------------
+\section*{Appendix: Data Sources and Validation}
+\addcontentsline{toc}{section}{Appendix: Data Sources and Validation}
+%----------------------------------------------------------------------
+
+\subsection*{Trade Data}
+\begin{itemize}
+    \item \textbf{US Census Bureau}: Foreign Trade Balance with Indonesia (2024), \$28.05B imports
+    \item \textbf{USTR}: Indonesia Country Profile, \$28.1B imports (rounded)
+    \item \textbf{UN COMTRADE}: Cross-reference via Trading Economics, \$29.55B (CIF basis)
+    \item \textbf{USITC DataWeb}: HTS-level import data
+\end{itemize}
+
+\subsection*{Tariff Rates}
+\begin{itemize}
+    \item \textbf{MFN rates}: WTO US Tariff Profile 2024/2025; USITC Harmonized Tariff Schedule
+    \item \textbf{Section 232}: Federal Register notices; CRS Report IN12519
+    \item \textbf{IEEPA reciprocal tariffs}: Executive Orders; White House fact sheets
+    \item \textbf{Section 122}: 19 U.S.C.\ \S 2132; CRS Report R48435
+\end{itemize}
+
+\subsection*{Cross-Validation}
+\begin{itemize}
+    \item \textbf{Yale Budget Lab}: ``State of U.S.\ Tariffs'' reports (February 20, 2026; July 23, 2025; November 17, 2025)
+    \item \textbf{Yale baseline US ETR}: 2.4\% (January 2025)---Our Indonesia-specific baseline of 5.0\% is higher due to textiles/footwear concentration, consistent with expectations
+    \item \textbf{Yale post-SCOTUS US ETR}: 9.1\%---Our Indonesia-specific 15.3\% reflects the 10\% S122 applied to Indonesia's high-MFN product mix
+    \item \textbf{Yale Liberation Day increase}: +11.5 pp overall US---Consistent with the country-specific 32\% tariff driving Indonesia's ETR to 36.6\%
+\end{itemize}
+
+\subsection*{Reconciliation with Yale Budget Lab Model (Incremental ETR)}
+
+In addition to this report's analysis, we ran the Yale Budget Lab's open-source Tariff-ETR model\footnote{\url{https://github.com/Budget-Lab-Yale/Tariff-ETRs}} directly on Indonesia's HS10-level import data. The Yale model produces different ETR figures because it measures a different quantity. Understanding the distinction is essential for interpreting the results.
+
+\subsubsection*{What each calculation measures}
+
+\begin{table}[htbp]
+\centering
+\caption{Methodological Differences: Total ETR vs.\ Incremental ETR}
+\small
+\begin{tabularx}{\textwidth}{lXX}
+\toprule
+& \textbf{This Report (Total ETR)} & \textbf{Yale Model (Incremental ETR)} \\
+\midrule
+Definition & Total tariff burden including MFN baseline duties & Additional tariff burden from executive actions only, excluding MFN \\
+Includes MFN? & Yes & No \\
+Granularity & HTS 2-digit ($\sim$27 chapter groups) & HTS 10-digit (4,921 product lines) \\
+Deal exemptions & Indonesia-specific ART: 1,819 lines exempted (palm oil, rubber, coffee, cocoa, semiconductors); textile TRQ & General IEEPA config only; product exemptions apply to all countries (pharma, certain electronics) \\
+Section 232 scope & 3 categories (steel, aluminum, autos) & 14 categories (steel, aluminum, autos, furniture, copper, softwood, others) \\
+Import data & \$28.05B (rounded, multiple sources) & \$27.88B (Census Bureau API, consumption imports) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsubsection*{Side-by-side comparison}
+
+\begin{table}[htbp]
+\centering
+\caption{ETR Reconciliation: Total vs.\ Incremental}
+\begin{tabular}{lcccl}
+\toprule
+\textbf{Scenario} & \textbf{Total ETR} & \textbf{Incremental ETR} & \textbf{Diff.} & \textbf{Explanation} \\
+\midrule
+Post-Deal / 12-4 & 19.7\% & 18.0\% & $\sim$1.7 pp & MFN adds $\sim$5 pp; deal \\
+& & & & exemptions subtract $\sim$3 pp \\
+Post-SCOTUS / 2-20 & 15.3\% & 12.7\% & $\sim$2.6 pp & Pure trade-weighted \\
+& & & & average MFN rate \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection*{Why the gaps differ across scenarios}
+
+In the \textbf{Post-SCOTUS} scenario, there are no exemptions in either calculation. The 2.6~pp difference reflects purely the trade-weighted average MFN rate for Indonesian products---this is the ``clean'' estimate of how much MFN contributes to the total ETR.
+
+In the \textbf{Post-Deal} scenario, this report includes Indonesia-specific deal exemptions that reduce the total ETR: palm oil faces only 2\% (MFN) instead of 21\% (MFN~+ reciprocal), rubber faces 3\% instead of 22\%, and so on. The Yale model does not model these deal exemptions and therefore applies the full 19\% reciprocal rate to those products. This partially offsets the MFN inclusion, producing a smaller gap (1.7~pp vs.\ 2.6~pp).
+
+\subsubsection*{Which measure to use}
+
+\begin{itemize}
+    \item \textbf{Total ETR} (this report) is appropriate for assessing the full tariff burden faced by Indonesian exporters, including standing MFN duties. It answers: ``What is the total duty rate on Indonesian goods entering the US?''
+    \item \textbf{Incremental ETR} (Yale model) is appropriate for isolating the policy impact of executive tariff actions above the pre-existing MFN schedule. It answers: ``How much additional tariff burden do executive actions impose beyond the MFN baseline?''
+\end{itemize}
+
+\noindent Both measures are valid and complementary. For policy analysis comparing scenarios against each other, the incremental ETR provides a cleaner comparison of policy changes. For trade cost analysis and exporter decision-making, the total ETR reflects actual duty payments.
+
+\subsection*{Legal Sources}
+\begin{itemize}
+    \item \textit{Learning Resources, Inc.\ v.\ Trump}, 607 U.S.\ \_\_\_ (2026)
+    \item Agreement of Reciprocal Trade, signed February 20, 2026
+    \item Freeport-McMoRan MoU, signed February 19, 2026
+    \item Section 122, Trade Act of 1974 (19 U.S.C.\ \S 2132)
+\end{itemize}
+
+\end{document}
